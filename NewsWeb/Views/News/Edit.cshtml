@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Edit News Page";
+}
+@model EditNewsViewModel
+@inject ICategoryInterface categoryInterface
+
+<h3 class="text-center">Add new</h3>
+        <hr />
+
+        <form asp-controller="news" asp-action="edit" enctype="multipart/form-data" method="post">
+            <div class="container mt-3 custom-input">
+                <input asp-for="Id" type="hidden" value="@Model.Id">
+                <input asp-for="ImagePath" type="hidden" value="@Model.ImagePath">
+                <label asp-for="Title" class="form-label">Post title</label>
+                <div class="input-group mb-3">
+                    <input asp-for="Title" type="text" class="form-control" value="@Model.Title">
+                </div>                
+                <span asp-validation-for="Title" class="text-danger"></span><br>
+
+                <label asp-for="Body" class="form-label">Post body</label>
+                <div class="input-group mb-3">
+                    <textarea asp-for="Body" class="form-control" rows="5">@Model.Body</textarea>
+                </div>
+                <span asp-validation-for="Body" class="text-danger"></span><br>
+
+                <label asp-for="CategoryId" class="form-label">Category</label>
+                <div class="input-group mb-3">
+                    <select asp-for="CategoryId" class="form-control" rows="5">
+                        @foreach (var item in categoryInterface.GetCategories())
+                        {
+                            if (item.Id == Model.Id)
+                            {
+                                <option selected value="@item.Id">@item.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                         }
+                    </select>
+                </div>
+
+                 <div class="col-md-4 p-4">
+                        <img src="~/images/@Model.ImagePath" asp-append-version="true" class="card-img-top" alt="logo" />
+                 </div>
+
+                <label asp-for="ImageFile" class="form-label">Post photo</label>
+                <div class="input-group mb-3">
+                    <input asp-for="ImageFile" accept="image/*" type="file" class="form-control">
+                </div>
+            </div>
+
+            <div class="button-group">
+                <a asp-controller="news" asp-action="index" class="btn btn-dark">Cancel</a>
+                <button type="submit" class="btn btn-success">Save</button>
+            </div>
+        </form>
